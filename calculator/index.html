@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+  
+    .calculator {
+      width: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+  
+    .display {
+      width: 100%;
+      height: 60px;
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px;
+      border: none;
+      outline: none;
+      background-color: #f9f9f9;
+      color: #333;
+      box-sizing: border-box;
+    }
+  
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background-color: #ddd;
+    }
+  
+    .buttons button {
+      height: 60px;
+      font-size: 1.5rem;
+      background-color: #fff;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  
+    .buttons button:hover {
+      background-color: #f0f0f0;
+    }
+  
+    .buttons .operator {
+      background-color: #f8d03f;
+      color: #fff;
+      font-weight: bold;
+    }
+  
+    .buttons .operator:hover {
+      background-color: #e5b636;
+    }
+  
+    .buttons .clear {
+      background-color: #f64e4e;
+      color: #fff;
+    }
+  
+    .buttons .clear:hover {
+      background-color: #d84343;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" class="display" readonly>
+    <div class="buttons">
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="performOperation('/')">/</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="performOperation('*')">*</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button class="operator" onclick="performOperation('-')">-</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="appendNumber('.')">.</button>
+      <button onclick="calculateResult()">=</button>
+      <button class="operator" onclick="performOperation('+')">+</button>
+      <button class="clear" onclick="clearDisplay()">C</button>
+    </div>
+  </div>
+  <script>
+    const display = document.getElementById('display');
+    let currentNumber = '';
+    let previousNumber = '';
+    let operation = '';
+
+    function appendNumber(number) {
+      if (currentNumber.includes('.') && number === '.') return;
+      currentNumber += number;
+      display.value = currentNumber;
+    }
+
+    function performOperation(op) {
+      if (currentNumber === '') return;
+      if (previousNumber !== '') {
+        calculateResult();
+      }
+      operation = op;
+      previousNumber = currentNumber;
+      currentNumber = '';
+    }
+
+    function calculateResult() {
+      if (currentNumber === '' || previousNumber === '') return;
+      let result;
+      const prev = parseFloat(previousNumber);
+      const current = parseFloat(currentNumber);
+
+      switch (operation) {
+        case '+':
+          result = prev + current;
+          break;
+        case '-':
+          result = prev - current;
+          break;
+        case '*':
+          result = prev * current;
+          break;
+        case '/':
+          result = prev / current;
+          break;
+        default:
+          return;
+      }
+
+      currentNumber = result.toString();
+      display.value = currentNumber;
+      operation = '';
+      previousNumber = '';
+    }
+
+    function clearDisplay() {
+      currentNumber = '';
+      previousNumber = '';
+      operation = '';
+      display.value = '';
+    }
+  </script>
+</body>
+</html>
